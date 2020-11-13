@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { NavbarApp } from "./components/Navbar";
+import { UsersTable } from "./components/UsersTable";
+import { AddUser } from "./components/AddUser";
+import { ApolloProvider } from "@apollo/client";
+import client from "./gqp_config/gql_config";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Switch,
+} from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ApolloProvider client={client}>
+      <div>
+        <Router>
+          <NavbarApp />
+          <Switch>
+            <Route exact path="/" component={UsersTable} />
+            <Route exact path="/createuser" component={AddUser} />
+          </Switch>
+        </Router>
+      </div>
+    </ApolloProvider>
   );
 }
 

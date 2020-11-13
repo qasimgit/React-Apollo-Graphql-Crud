@@ -1,5 +1,4 @@
 const { ApolloServer, gql } = require("apollo-server");
-const { parse } = require("path");
 
 const users = [
   { id: 1, name: "Qasim", email: "qasim@gmail.com", age: 19 },
@@ -23,6 +22,7 @@ const users = [
   },
 ];
 
+console.log(users);
 const resolvers = {
   Query: {
     users: () => users,
@@ -30,24 +30,29 @@ const resolvers = {
 
   Mutation: {
     createUser: (parent, args) => {
-      const ids = users.map((id) => id);
-      const newID = parseInt(Math.max(...ids)) + 1;
+      const ids = users.map(({ id }) => id);
+      const id = parseInt(Math.max(...ids)) + 1;
+      console.log(id);
       const user = {
-        newID,
+        id,
         ...args,
       };
       users.push(user);
+      console.log(user);
       return user;
     },
+    // deleteUser: (parent , args) => {
+
+    // }
   },
 };
 
 const typeDefs = gql`
   type User {
     id: Int
-    name: String
-    email: String
-    age: Int
+    name: String!
+    email: String!
+    age: Int!
   }
 
   type Query {
@@ -55,7 +60,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    createUser(name: String, email: String, age: Int): User
+    createUser(name: String!, email: String!, age: Int!): User
   }
 `;
 
