@@ -3,6 +3,18 @@ import { Card, Form, Button } from "react-bootstrap";
 import { gql, useMutation } from "@apollo/client";
 import { Link } from "react-router-dom";
 
+// get user schema
+const GET_USERS = gql`
+  query GetUsers {
+    users {
+      id
+      name
+      email
+      age
+    }
+  }
+`;
+
 const CREATE_USER = gql`
   mutation CreateUser($name: String!, $email: String!, $age: Int!) {
     createUser(name: $name, email: $email, age: $age) {
@@ -12,8 +24,11 @@ const CREATE_USER = gql`
     }
   }
 `;
+
 export const AddUser = () => {
-  const [createUser, { data }] = useMutation(CREATE_USER);
+  const [createUser, { data }] = useMutation(CREATE_USER, {
+    refetchQueries: [{ query: GET_USERS }],
+  });
 
   const [userInput, seUserInput] = useState({
     name: "",
@@ -23,6 +38,10 @@ export const AddUser = () => {
 
   console.log("userInput", userInput);
 
+  /**
+   * 
+   *  Function For Create User
+   */
   const handleInput = ({ target: { name, value } }) => {
     seUserInput({
       ...userInput,
@@ -31,12 +50,13 @@ export const AddUser = () => {
     });
   };
 
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     createUser({
       variables: {
         ...userInput,
-        age: parseInt(userInput.age),
+        age: Number(userInput.age),
       },
     });
   };

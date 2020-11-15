@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require("apollo-server");
 
-const users = [
+let users = [
   { id: 1, name: "Qasim", email: "qasim@gmail.com", age: 19 },
   {
     id: 2,
@@ -39,11 +39,48 @@ const resolvers = {
       };
       users.push(user);
       console.log(user);
+
       return user;
     },
-    // deleteUser: (parent , args) => {
 
-    // }
+    updateUser: (parent, { id, name, email, age }) => {
+      console.log("My Idddd", id);
+      // const  = users.findIndex((user) => user.id == id);
+      // const updatedUsers = users.map((user) =>
+      //   user.id === id ? { id, name, email, age } : user
+      // );
+
+      let updatedUsers = users.map((usr) => {
+        if (usr.id == id) {
+          return {
+            id,
+            name,
+            email,
+            age,
+          };
+        }
+        return usr;
+      });
+
+      console.log("Updated usersss", updatedUsers);
+
+      users = updatedUsers;
+
+      return { id, name, email, age };
+    },
+    deleteUser: (parent, { id }) => {
+      const i = users.findIndex((user) => user.id === id);
+      if (!users[i])
+        return {
+          success: false,
+          message: "User not found...",
+        };
+      users.splice(i, 1);
+      return {
+        success: true,
+        message: "user deleted successfully...",
+      };
+    },
   },
 };
 
@@ -61,6 +98,12 @@ const typeDefs = gql`
 
   type Mutation {
     createUser(name: String!, email: String!, age: Int!): User
+    deleteUser(id: Int!): Status!
+    updateUser(id: Int!, name: String!, email: String!, age: Int!): User
+  }
+  type Status {
+    success: Boolean
+    message: String!
   }
 `;
 
