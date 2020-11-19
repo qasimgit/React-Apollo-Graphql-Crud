@@ -39,7 +39,7 @@ export const AddUser = () => {
   console.log("userInput", userInput);
 
   /**
-   * 
+   *
    *  Function For Create User
    */
   const handleInput = ({ target: { name, value } }) => {
@@ -50,7 +50,6 @@ export const AddUser = () => {
     });
   };
 
-  
   const handleSubmit = (e) => {
     e.preventDefault();
     createUser({

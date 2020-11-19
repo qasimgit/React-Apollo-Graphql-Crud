@@ -86,7 +86,7 @@ const resolvers = {
 
 const typeDefs = gql`
   type User {
-    id: Int
+    id: Int!
     name: String!
     email: String!
     age: Int!
